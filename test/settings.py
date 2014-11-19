@@ -33,4 +33,4 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = "test_urls"
+ROOT_URLCONF = "test.urls"
