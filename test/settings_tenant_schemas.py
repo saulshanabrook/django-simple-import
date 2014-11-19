@@ -6,6 +6,7 @@ from .settings import *
 DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
 
+print DATABASES
 SHARED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
