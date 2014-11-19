@@ -1,0 +1,2 @@
+django-tenant-schemas
+dj-database-url

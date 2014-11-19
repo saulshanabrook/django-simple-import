@@ -1,20 +1,28 @@
 import os
+import copy
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from django.core.files import File
+from django.conf import settings
+
 from simple_import.compat import User
 from simple_import.models import *
-from django.core.files import File
+
 
 class SimpleTest(TestCase):
+
+    # so we can override on tenant schemas test
+    host = None
+
     def setUp(self):
         user = User.objects.create_user('temporary', 'temporary@gmail.com', 'temporary')
         user.is_staff = True
         user.is_superuser = True
         user.save()
         self.client.login(username='temporary', password='temporary')
-        self.absolute_path = os.path.join(os.path.dirname(__file__), 'static', 'test_import.xls')
+        self.absolute_path = os.path.join(settings.PROJECT_DIR, 'static', 'test_import.xls')
         self.import_setting = ImportSetting.objects.create(
             user=user,
             content_type=ContentType.objects.get_for_model(ImportLog)
@@ -42,8 +50,7 @@ class SimpleTest(TestCase):
                 'model': import_log_ct_id}, follow=True)
 
         self.assertEqual(ImportLog.objects.count(), 2)
-
-        self.assertRedirects(response, reverse('simple_import-match_columns', kwargs={'import_log_id': ImportLog.objects.all()[1].id}))
+        self.assertRedirects(response, reverse('simple_import-match_columns', kwargs={'import_log_id': ImportLog.objects.all()[1].id}), host=self.host)
         self.assertContains(response, '<h1>Match Columns</h1>')
         # Check matching
         self.assertContains(response, '<option value="name" selected="selected">')
@@ -87,8 +94,8 @@ class SimpleTest(TestCase):
             'columnmatch_set-5-import_setting':self.import_setting.id,
             'columnmatch_set-5-field_name':'import_type',
         }, follow=True)
-
-        self.assertRedirects(response, reverse('simple_import-match_relations', kwargs={'import_log_id': self.import_log.id}))
+        print response
+        self.assertRedirects(response, reverse('simple_import-match_relations', kwargs={'import_log_id': self.import_log.id}), host=self.host)
         self.assertContains(response, '<h1>Match Relations and Prepare to Run Import</h1>')
         self.assertEqual(ColumnMatch.objects.count(), 6)
 
@@ -111,8 +118,7 @@ class SimpleTest(TestCase):
             'relationalmatch_set-1-related_field_name':'id',
         }, follow=True)
 
-        self.assertRedirects(response, reverse('simple_import-do_import', kwargs={'import_log_id': self.import_log.id}))
+        self.assertRedirects(response, reverse('simple_import-do_import', kwargs={'import_log_id': self.import_log.id}), host=self.host)
         self.assertContains(response, '<h1>Import Results</h1>')
 
         self.assertEqual(RelationalMatch.objects.count(), 2)
-

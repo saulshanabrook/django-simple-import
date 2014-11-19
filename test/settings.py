@@ -1,7 +1,10 @@
 import os
-PROJECT_DIR = os.path.dirname(__file__)
 
+
+PROJECT_DIR = os.path.dirname(__file__) + '/../simple_import'
 STATIC_URL = PROJECT_DIR + '/static/'
+
+SECRET_KEY = '_'
 
 DATABASES = {
     'default': {
