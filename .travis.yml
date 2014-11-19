@@ -4,7 +4,7 @@ python:
 before_script:
   - psql -c 'create database travis_ci;' -U postgres
 env:
-  - DATABASE_URL="postgres://postgres@localhost:5432/travis_ci"
+  - DATABASE_URL=postgres://postgres@127.0.0.1/travis_ci
 install:
   - pip install -e . -r test/requirements.txt $DJANGO_VERSION
 script: ./test.sh
