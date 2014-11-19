@@ -1,8 +1,9 @@
 import dj_database_url
 
 from .settings import *
+import os
 
-
+print os.environ['DATABASE_URL']
 DATABASES = {'default': dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'tenant_schemas.postgresql_backend'
 
