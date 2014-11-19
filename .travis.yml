@@ -13,7 +13,7 @@ env:
     - DJANGO_VERSION="django>=1.7,<1.8" TEST_TYPE=normal
     - DJANGO_VERSION="django>=1.6,<1.7" TEST_TYPE=normal
     - DJANGO_VERSION="django>=1.7,<1.8" TEST_TYPE=tenant
-    - DJANGO_VERSION="django>=1.6,<1.7" TEST_TYPE=tenat
+    - DJANGO_VERSION="django>=1.6,<1.7" TEST_TYPE=tenant
 
 matrix:
   allow_failures:
